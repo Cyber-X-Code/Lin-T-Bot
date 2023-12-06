@@ -3,13 +3,24 @@ const { part004Composer } = require('./part004.composers');
 const { part003Message } = require('../message');
 
 const part003Composer = new Composer();
+let userTasks = {}; 
 
 part003Composer.action('part003', async (ctx) => {
   try {
+    const userId = ctx.from.id;
+
+    if (!userTasks[userId]) {
+      userTasks[userId] = {
+        currentTaskIndex: 0
+      };
+    }
+
+    const { currentTaskIndex } = userTasks[userId];
+
     const photo = {
-      source: '././img/space_base.jpg'  
+      source: '././img/igor.jpg'  
     };
-    const message = (part003Message[0]);
+    const message = part003Message[currentTaskIndex];
     await ctx.answerCbQuery();
     await ctx.replyWithPhoto(photo, {
       caption: message,
@@ -22,11 +33,10 @@ part003Composer.action('part003', async (ctx) => {
       }
     });
   } catch(e) {
-    console.error(e)
+    console.error(e);
   }
 });
 
 part003Composer.use(part004Composer);
 
 module.exports = { part003Composer };
-

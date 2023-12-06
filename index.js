@@ -1,13 +1,16 @@
 // Файл index.js
 const { Telegraf, Markup } = require('telegraf');
+require('dotenv').config()
+
+const token = process.env.TOKEN
+const bot = new Telegraf(token);
+
 const { part001Composer } = require('./composers/part001.composers');
 const { welcomeMessage } = require('./message');
 
-const bot = new Telegraf('');
-
 bot.start((ctx) => {
   const image = {
-    source: './img/igor.jpg'
+    source: './img/Linux-Logo.png'
   };
 
   ctx.replyWithPhoto(image, {
@@ -19,7 +22,6 @@ bot.start((ctx) => {
 });
 
 bot.start((ctx) => {
-  // Загружаем картинку
   const image = {
     source: './img/igor.jpg'
   };
@@ -33,7 +35,6 @@ bot.start((ctx) => {
 
   ctx.replyWithPhoto(image, message);
 });
-
 
 bot.use(part001Composer);
 
