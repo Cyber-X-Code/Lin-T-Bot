@@ -1,77 +1,46 @@
-// Файл part001.composers.js
-const { Composer, Markup } = require('telegraf');
-const { endGame } = require('../message')
+// partEnd.composers.js
+const { Scenes, Markup } = require('telegraf');
 
-const partEndComposer = new Composer();
+const partEnd = new Scenes.BaseScene('partEnd');
 
+const { endGame } = require('../message');
 
-partEndComposer.action('partEnd', async (ctx) => {
+partEnd.enter(async (ctx) => {
   try {
-    const salut = {
-      source: '././video/salut.mp4'  
-    };
-    const message = (endGame[0]);
-    await ctx.answerCbQuery();
+    const messageEnd = endGame;
+    const salut = { source: '././video/salut.mp4' };
+
     await ctx.replyWithVideo(salut, {
-      caption: message,
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: 'Повторит приключения! Начать сначала!', callback_data: 'part001' }
-          ]
-        ]
-      },
-      supports_streaming: true
-    });
-  } catch(e) {
-    console.error(e);
+      caption: `${ messageEnd }`
+    })
+  } catch(error) {
+    console.error(error)
   }
 });
 
-//part007Composer.use(part007Composer);
-
-module.exports = { partEndComposer };
-
-
-
-// const { Composer, Markup } = require('telegraf');
-// const { endGame } = require('../message');
-
-// const partEndComposer = new Composer();
-// let userTasks = {}; 
-
-// partEndComposer.action('partEnd', async (ctx) => {
+// partEnd.enter(async (ctx) => {
 //   try {
-//     const userId = ctx.from.id;
+//     const messageEnd = endGame;
+//     const salut = { source: '././video/salut.mp4' };
 
-//     if (!userTasks[userId]) {
-//       userTasks[userId] = {
-//         currentTaskIndex: 0
-//       };
-//     }
-
-//     const { currentTaskIndex } = userTasks[userId];
-
-//     const photo = {
-//       source: '././img/saliut.jpg'  
-//     };
-//     const message = endGame[currentTaskIndex];
-//     await ctx.answerCbQuery();
-//     await ctx.replyWithPhoto(photo, {
-//       caption: message,
+//     await ctx.replyWithVideo(salut, {
+//       caption: `${ messageEnd }`,
 //       reply_markup: {
-//         inline_keyboard: [
-//           [
-//             { text: 'Повторит приключения! Начать сначала!', callback_data: 'part001' }
-//           ]
-//         ]
+//         inline_keyboard: [[{ text: 'Начать приключения с начала?', callback_data: 'goPart001' }]]
 //       }
 //     });
-//   } catch(e) {
-//     console.error(e);
-//   }
-// });
+//     } catch(error) {
+//       console.error(error);
+//     }
+//   });
 
-// //part007Composer.use(part007Composer);
+partEnd.action('Part001', async (ctx) => {
+  await ctx.answerCbQuery();
+  await ctx.scene.enter('/start');
+});
 
-// module.exports = { partEndComposer };
+module.exports = { partEnd };
+
+
+
+// await ctx.reply(part009Message[0])});

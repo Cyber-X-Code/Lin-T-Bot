@@ -1,34 +1,29 @@
-// Файл part001.composers.js
-const { Composer, Markup } = require('telegraf');
-const { part005Composer } = require('./part005.composers');
+// part004.composers.js
+const { Scenes } = require('telegraf');
+
+const part004 = new Scenes.BaseScene('part004');
+
 const { part004Message } = require('../message');
 
-const part004Composer = new Composer();
-
-
-part004Composer.action('part004', async (ctx) => {
+part004.enter(async (ctx) => {
   try {
-    const photo = {
-      source: '././img/space_base.jpg'  
-    };
-    const message = (part004Message[0]);
-    await ctx.answerCbQuery();
-    await ctx.replyWithPhoto(photo, {
-      caption: message,
+    const message004 = part004Message;
+    const photo004 = { source: '././img/space_base.jpg' };
+
+    await ctx.replyWithPhoto(photo004, {
+      caption: `${ message004 }`,
       reply_markup: {
-        inline_keyboard: [
-          [
-            { text: 'Продолжить', callback_data: 'part005' }
-          ]
-        ]
+        inline_keyboard: [[{ text: 'Продолжить приключения!', callback_data: 'goPart005' }]]
       }
-    });
-  } catch(e) {
-    console.error(e);
-  }
-});
+    })
+    } catch(error) {
+      console.error(error);
+    }
+  });
 
-part004Composer.use(part005Composer);
+part004.action('goPart005', async (ctx) => {
+  await ctx.answerCbQuery();
+  await ctx.scene.enter('part005');
+})
 
-module.exports = { part004Composer };
-
+module.exports = { part004 };

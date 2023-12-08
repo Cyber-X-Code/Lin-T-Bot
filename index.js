@@ -1,77 +1,75 @@
-// Файл index.js
-const { Telegraf, Markup } = require('telegraf');
-require('dotenv').config()
+// Импортируем необходимые библиотеки
+const { Telegraf, Markup, Scenes, session } = require('telegraf');
+require('dotenv').config();
 
-const token = process.env.TOKEN
-const bot = new Telegraf(token);
+// Импортируем наши сцены из отдельного файла
+const { scenes } = require('./scenes.js');
 
-const { part001Composer } = require('./composers/part001.composers');
-const { welcomeMessage } = require('./message');
+const { welcomeMessage } = require('./message.js');
 
+// Инициализируем бота с вашим токеном
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.start((ctx) => {
-  const image = {
-    source: './img/Linux-Logo.png'
-  };
-  
-  const message = {
-    caption: (welcomeMessage[0]),
-    reply_markup: Markup.inlineKeyboard([
-      Markup.callbackButton('Начать', 'part001')
-    ])
-  };
+// Создаем менеджер сцен
+const stage = new Scenes.Stage(scenes);
 
-  ctx.replyWithPhoto(image, message);
+// Используем сессию и сцену
+bot.use(session())
+bot.use(stage.middleware());
 
-  // ctx.replyWithPhoto(image, message, {
-    
-  // });
+bot.start(async (ctx) => {
+  const welcomeMsg = welcomeMessage;
+  const photo = { source: './img/Linux-Logo.png' };
+
+  await ctx.replyWithPhoto(photo, {
+    caption: `${welcomeMsg}`,
+    reply_markup: {
+      inline_keyboard: [[{ text: 'Начать', callback_data: 'start' }]]
+    }
+  });
 });
 
-bot.use(part001Composer);
+// Обработка кнопки "Начать"
+bot.action('start', (ctx) => {
+  ctx.answerCbQuery();
+  ctx.scene.enter('part001')
+});
 
+// Запускаем бота
 bot.launch();
 
 
+// // Импортируем необходимые библиотеки
+// const { Telegraf, Markup, Scenes, session } = require('telegraf')
 
-// // Файл index.js
-// const { Telegraf, Markup } = require('telegraf');
-// require('dotenv').config()
+// // Импортируем наши сцены
+// const { part001 } = require('./composers/part001.composers.js')
+// const { part002 } = require('./composers/part002.composers.js')
+// const { part003 } = require('./composers/part003.composers.js')
+// const { part004 } = require('./composers/part004.composers.js')
 
-// const token = process.env.TOKEN
-// const bot = new Telegraf(token);
+// // Инициализируем бота с вашим токеном
+// const bot = new Telegraf('6982892958:AAEFNqgFDd2wFTddmSLPGTij3N2v8085CqA')
 
-// const { part001Composer } = require('./composers/part001.composers');
-// const { welcomeMessage } = require('./message');
+// // Создаем менеджер сцен
+// const stage = new Scenes.Stage([part001, part002, part003, part004])
 
+// // Используем сессию и сцену
+// bot.use(session())
+// bot.use(stage.middleware())
+
+// // Начальное сообщение
 // bot.start((ctx) => {
-//   const image = {
-//     source: './img/Linux-Logo.png'
-//   };
-
-//   ctx.replyWithPhoto(image, {
-//     caption: (welcomeMessage[0]),
-//     reply_markup: Markup.inlineKeyboard([
-//       Markup.callbackButton('Продолжить', 'part001')
+//   ctx.reply(
+//     `Привет, ${ctx.from.first_name}! Готовы начать?`,
+//     Markup.inlineKeyboard([
+//       Markup.button.callback('Начать', 'START')
 //     ])
-//   });
-// });
+//   )
+// })
 
-// bot.start((ctx) => {
-//   const image = {
-//     source: './img/igor.jpg'
-//   };
+// // Обработка кнопки "Начать"
+// bot.action('START', (ctx) => ctx.scene.enter('part001'))
 
-//   const message = {
-//     caption: (welcomeMessage[0]),
-//     reply_markup: Markup.inlineKeyboard([
-//       Markup.callbackButton('Начать', 'part001')
-//     ])
-//   };
-
-//   ctx.replyWithPhoto(image, message);
-// });
-
-// bot.use(part001Composer);
-
-// bot.launch();
+// // Запускаем бота
+// bot.launch()
