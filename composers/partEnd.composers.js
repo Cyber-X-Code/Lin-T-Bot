@@ -34,10 +34,10 @@ partEnd.enter(async (ctx) => {
 //     }
 //   });
 
-partEnd.action('Part001', async (ctx) => {
-  await ctx.answerCbQuery();
-  await ctx.scene.enter('/start');
-});
+// partEnd.action('Part001', async (ctx) => {
+//   await ctx.answerCbQuery();
+//   await ctx.scene.enter('/start');
+// });
 
 module.exports = { partEnd };
 

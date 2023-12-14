@@ -1,4 +1,4 @@
-// part019.composers.js
+// part022.composers.js
 const { Scenes, Markup } = require('telegraf');
 
 const part022 = new Scenes.BaseScene('part022');
@@ -13,7 +13,7 @@ part022.on('text', async (ctx) => {
       if (ctx.message.text.toLowerCase() === 'shutdown now') {
         await ctx.reply('Вывод команды shutdown now')
         await ctx.replyWithPhoto({ source: '././img/shutdown.png' }, Markup.inlineKeyboard([
-          Markup.button.callback('Продолжить', 'goPartEnd')
+          Markup.button.callback('Продолжить', 'goPart023')
         ]))
       } else {
         await ctx.reply('Неверный ответ, попробуйте еще раз.')
@@ -23,9 +23,9 @@ part022.on('text', async (ctx) => {
     }
   });
 
-  part022.action('goPartEnd', async (ctx) => {
+  part022.action('goPart023', async (ctx) => {
     await ctx.answerCbQuery();
-    await ctx.scene.enter('partEnd');
+    await ctx.scene.enter('part023');
   })
 
 module.exports = { part022 };
