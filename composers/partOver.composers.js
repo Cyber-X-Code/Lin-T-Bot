@@ -13,7 +13,7 @@ partOver.enter(async (ctx) => {
     await ctx.replyWithVideo(salut, {
       caption: `${ messageEnd }`,
       reply_markup: {
-        inline_keyboard: [[{ text: 'Вернуться на шаг назад', callback_data: 'goPart015' }]]
+        inline_keyboard: [[{ text: 'Вернуться на шаг назад', callback_data: 'goPart023' }]]
       }
     });
   } catch(error) {
@@ -21,9 +21,9 @@ partOver.enter(async (ctx) => {
   }
 });
 
-partOver.action('goPart015', async (ctx) => {
+partOver.action('goPart023', async (ctx) => {
   await ctx.answerCbQuery();
-  await ctx.scene.enter('part015');
+  await ctx.scene.enter('part023');
 });
 
 module.exports = { partOver };
